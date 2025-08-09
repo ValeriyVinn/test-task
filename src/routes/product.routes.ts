@@ -58,7 +58,6 @@ const { Router } = expressPkg;
 import type { Request, Response } from 'express';
 
 import Product from '../../models/product.model.ts';
-// import { authMiddleware, AuthRequest } from '../middleware/authMiddleware.ts';
 import { authMiddleware } from '../middleware/authMiddleware.ts';
 import type { AuthRequest } from '../middleware/authMiddleware.ts';
 
@@ -105,7 +104,8 @@ router.get('/products', async (_req: Request, res: Response) => {
     const products = await Product.find().populate('user', 'name email');
     return res.json(products);
   } catch (error: unknown) {
-    console.error(error);
+    // console.error(error);
+    console.error("Error fetching products:", error);
     return res.status(500).json({ message: 'Помилка сервера' });
   }
 });

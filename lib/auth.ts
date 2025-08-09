@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
+const JWT_SECRET = process.env.JWT_SECRET || 'your_super_secret_key';
 const JWT_EXPIRES_IN = '7d'; // наприклад, 7 днів
 
 interface TokenPayload {
