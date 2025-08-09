@@ -2,6 +2,7 @@ import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import connectDB from './db';
 import authRoutes from './src/routes/auth.routes';
+import productRoutes from './src/routes/product.routes';
 // import User from './models/user.model';
 // import Product from './models/product.model';
 
@@ -12,6 +13,7 @@ const app: Application = express();
 app.use(express.json());
 
 app.use('/api', authRoutes);
+app.use('/api', productRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');
