@@ -1,14 +1,25 @@
 
+'use client';
 
-export default function Home() {
+import { useAuth } from '../context/AuthContext';
+
+export default function HomePage() {
+  const { user, logout } = useAuth();
+
   return (
-    <div >
-      <main>
-        <h1>Test-task</h1>
-      </main>
-      <footer>
-        
-      </footer>
-    </div>
+    <main style={{ padding: 32 }}>
+      <h1>Вітаємо у додатку!</h1>
+      {user ? (
+        <>
+          <p>Ви увійшли як: <b>{user.name || user.email}</b></p>
+          <button onClick={logout}>Вийти</button>
+        </>
+      ) : (
+        <>
+          <p>Ви не авторизовані.</p>
+          <a href="/login">Увійти</a> | <a href="/register">Зареєструватися</a>
+        </>
+      )}
+    </main>
   );
 }
