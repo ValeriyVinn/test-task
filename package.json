@@ -7,7 +7,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "api": "ts-node server.ts"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

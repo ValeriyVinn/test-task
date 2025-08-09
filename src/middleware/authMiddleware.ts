@@ -25,7 +25,41 @@
 //   }
 // };
 
-import { Request, Response, NextFunction } from 'express';
+
+// -----------------
+
+// import { Request, Response, NextFunction } from 'express';
+// import jwt from 'jsonwebtoken';
+
+// const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+
+// // Тип для користувача, що зберігається у req.user
+// interface JwtPayload {
+//   id: string;
+//   email: string;
+// }
+
+// export interface AuthRequest extends Request {
+//   user?: JwtPayload;
+// }
+
+// export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
+//   const token = req.header('Authorization')?.replace('Bearer ', '');
+
+//   if (!token) {
+//     return res.status(401).json({ message: 'Немає токена, авторизація відхилена' });
+//   }
+
+//   try {
+//     const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
+//     req.user = decoded;
+//     next();
+//   } catch {
+//     return res.status(401).json({ message: 'Невірний або прострочений токен' });
+//   }
+// };
+// -----------------------------
+import type { Request as ReqType, Response as ResType, NextFunction as NextFnType } from 'express';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
@@ -36,11 +70,16 @@ interface JwtPayload {
   email: string;
 }
 
-export interface AuthRequest extends Request {
+// Розширений тип запиту з user
+export interface AuthRequest extends ReqType {
   user?: JwtPayload;
 }
 
-export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const authMiddleware = (
+  req: AuthRequest,
+  res: ResType,
+  next: NextFnType
+) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
 
   if (!token) {
