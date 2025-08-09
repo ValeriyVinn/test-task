@@ -20,10 +20,6 @@ export const comparePasswords = async (password: string, hashed: string): Promis
   return bcrypt.compare(password, hashed);
 };
 
-// Генерація JWT токена
-// export const generateToken = (userId: string): string => {
-//   return jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
-// };
 
 export const generateToken = (payload: TokenPayload): string => {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
