@@ -20,10 +20,14 @@ export async function loginUser(email: string, password: string) {
   return res.json();
 }
 
-export async function getProducts(token: string) {
-  const res = await fetch(`${API_URL}/products`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+export async function getProducts(token?: string | null) {
+  const headers: HeadersInit = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  const res = await fetch(`${API_URL}/products`, { headers });
+
   if (!res.ok) throw new Error('Failed to fetch products');
   return res.json();
 }

@@ -1,25 +1,29 @@
-
-'use client';
-
-import { useAuth } from '../context/AuthContext';
+// import Link from "next/link";
+import Header from "../components/Header";
 
 export default function HomePage() {
-  const { user, logout } = useAuth();
-
   return (
-    <main style={{ padding: 32 }}>
-      <h1>Вітаємо у додатку!</h1>
-      {user ? (
-        <>
-          <p>Ви увійшли як: <b>{user.name || user.email}</b></p>
-          <button onClick={logout}>Вийти</button>
-        </>
-      ) : (
-        <>
-          <p>Ви не авторизовані.</p>
-          <a href="/login">Увійти</a> | <a href="/register">Зареєструватися</a>
-        </>
-      )}
+    <main className="min-h-screen flex flex-col items-center  p-6">
+      <Header />
+
+      <div className="mt-10 text-center">
+        <h1 className="text-4xl font-bold mb-4">Ласкаво просимо!</h1>
+
+        {/* <div className="mt-6 space-x-4">
+          <Link
+            href="/login"
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+          >
+            Login
+          </Link>
+          <Link
+            href="/register"
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+          >
+            Register
+          </Link>
+        </div> */}
+      </div>
     </main>
   );
 }
