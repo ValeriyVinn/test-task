@@ -31,3 +31,17 @@ export async function getProducts(token?: string | null) {
   if (!res.ok) throw new Error('Failed to fetch products');
   return res.json();
 }
+
+export async function createProduct(token: string, name: string, price: number, description: string) {
+  const res = await fetch(`${API_URL}/products`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ name, price, description }),
+  });
+  if (!res.ok) throw new Error('Failed to create product');
+  return res.json();
+}
+

@@ -288,6 +288,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'supersecret';
 // -------------------------
 // 📌 Реєстрація
 // -------------------------
+// 📌 Реєстрація
 router.post('/register', async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
@@ -311,12 +312,26 @@ router.post('/register', async (req: Request, res: Response) => {
 
     await newUser.save();
 
-    res.status(201).json({ message: 'Користувач успішно створений' });
+    // створюємо токен
+    const token = jwt.sign({ id: newUser._id }, JWT_SECRET, { expiresIn: '1d' });
+
+    // відправляємо токен + користувача без пароля
+    res.status(201).json({
+      token,
+      user: {
+        _id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+      }
+    });
+
   } catch (error) {
     console.error('Register error:', error);
     res.status(500).json({ message: 'Помилка сервера' });
   }
 });
+
+
 
 // -------------------------
 // 📌 Логін
