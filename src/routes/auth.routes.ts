@@ -20,51 +20,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
 // -------------------------
 // 📌 Реєстрація
 // -------------------------
-// router.post("/register", async (req: Request, res: Response) => {
-//   try {
-//     const { name, email, password } = req.body;
 
-//     if (!name || !email || !password) {
-//       return res.status(400).json({ message: "Всі поля обовʼязкові" });
-//     }
-
-//     const existingUser = await User.findOne({ email });
-//     if (existingUser) {
-//       return res
-//         .status(400)
-//         .json({ message: "Користувач з таким email вже існує" });
-//     }
-//     console.log("Before hash:", password);
-
-//     const hashedPassword = await bcrypt.hash(password, 10);
-//     console.log("Hash:", hashedPassword);
-
-//     const newUser = new User({
-//       name,
-//       email,
-//       password: hashedPassword,
-//     });
-
-//     await newUser.save();
-
-//     const token = jwt.sign({ id: newUser._id }, JWT_SECRET, {
-//       expiresIn: "1d",
-//     });
-
-//     res.status(201).json({
-//       token,
-//       user: {
-//         _id: newUser._id,
-//         name: newUser.name,
-//         email: newUser.email,
-//       },
-//     });
-//   } catch (error) {
-//     console.error("Register error:", error);
-//     res.status(500).json({ message: "Помилка сервера" });
-//   }
-// });
-// 📌 Реєстрація
 router.post('/register', async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
@@ -123,8 +79,8 @@ router.post("/login", async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Невірний email або пароль" });
     }
 
-    console.log("Password from login form:", JSON.stringify(password));
-    console.log("Password from DB:", JSON.stringify(user.password));
+    // console.log("Password from login form:", JSON.stringify(password));
+    // console.log("Password from DB:", JSON.stringify(user.password));
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
