@@ -137,8 +137,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
-import { getProducts, createProduct } from "../../lib/api";
+import { useAuth } from "../../../context/AuthContext";
+import { getProducts, createProduct } from "../../../lib/api";
 
 interface Product {
   _id: string;
@@ -225,7 +225,7 @@ export default function DashboardPage() {
           <button
             onClick={() => {
               logout();
-              window.location.href = "/"; // ← після logout перенаправляє на головну
+              // window.location.href = "/"; // ← після logout перенаправляє на головну
             }}
             className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600"
           >

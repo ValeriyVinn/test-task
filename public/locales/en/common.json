@@ -1,0 +1,10 @@
+{
+  "login": "Login",
+  "register": "Register",
+  "logout": "Logout",
+  "dashboard": "Dashboard",
+  "add_product": "Add Product",
+  "products": "Products",
+  "profile": "Profile",
+  "welcome": "Welcome {{name}}"
+}

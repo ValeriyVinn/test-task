@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
-import { getProducts } from "../../lib/api";
+import { useAuth } from "../../../context/AuthContext";
+import { getProducts } from "../../../lib/api";
 
 type Product = {
   _id: string;

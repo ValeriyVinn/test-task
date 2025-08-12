@@ -1,0 +1,10 @@
+{
+  "login": "Увійти",
+  "register": "Зареєструватися",
+  "logout": "Вийти",
+  "dashboard": "Дашборд",
+  "add_product": "Додати продукт",
+  "products": "Товари",
+  "profile": "Профіль",
+  "welcome": "Вітаємо {{name}}"
+}
