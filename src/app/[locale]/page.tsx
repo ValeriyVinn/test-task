@@ -1,4 +1,3 @@
-
 'use client';
 import React from 'react';
 import Link from "next/link";
@@ -14,7 +13,7 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
       <Header />
 
       <div className="mt-10 text-center">
-        <h1 className="text-4xl font-bold mb-4">{t('welcome')}</h1>
+        {/* <h1 className="text-4xl font-bold mb-4">{t('welcome')}</h1> */}
 
         <div className="mt-6 space-x-4">
           <Link

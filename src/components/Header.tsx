@@ -6,22 +6,22 @@ import { usePathname, useRouter } from 'next/navigation';
 import { languages } from '../../lib/settings';
 
 export default function Header() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation('common'); // <-- підключаємо переклади
   const router = useRouter();
   const pathname = usePathname();
 
   const handleLanguageChange = (lng: string) => {
+    if (lng === i18n.language) return;
     const segments = pathname.split('/');
     segments[1] = lng; // замінюємо локаль в URL
     const newPath = segments.join('/');
-    i18n.changeLanguage(lng);
     router.push(newPath);
   };
 
   return (
     <header className="w-full flex justify-between items-center p-4 bg-gray-100 shadow">
       <Link href={`/${i18n.language}`} className="text-2xl font-bold text-gray-800">
-        Тестове завдання
+        {t('site_title')} 
       </Link>
 
       <nav className="space-x-4">
@@ -30,10 +30,12 @@ export default function Header() {
             key={lng}
             onClick={() => handleLanguageChange(lng)}
             className={`px-3 py-1 rounded ${
-              i18n.language === lng ? 'bg-blue-600 text-white' : 'bg-white text-blue-600 border'
+              i18n.language === lng
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-blue-600 border'
             }`}
           >
-            {lng.toUpperCase()}
+            {t(`lang_${lng}`)} 
           </button>
         ))}
       </nav>
