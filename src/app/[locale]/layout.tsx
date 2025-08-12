@@ -9,8 +9,8 @@ export async function generateStaticParams() {
   return languages.map((lng) => ({ locale: lng }));
 }
 
-export default function RootLayout({ children, params }: { children: React.ReactNode; params: { locale: string } }) {
-  const { locale } = params;
+export default function RootLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }) {
+  const { locale } = React.use(params);
   return (
     <html lang={locale} dir={dir(locale)}>
       <body>

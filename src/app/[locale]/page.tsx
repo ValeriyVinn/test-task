@@ -5,8 +5,8 @@ import Link from "next/link";
 import Header from "../../components/Header";
 import { useTranslation } from "react-i18next";
 
-export default function RootLayout({ params }: {  params: { locale: string } }) {
-  const { locale } = params;
+export default function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = React.use(params);
   const { t } = useTranslation('common');
 
   return (

@@ -27,6 +27,8 @@ export function middleware(req: NextRequest) {
   return NextResponse.redirect(new URL(`/${locale}${pathname}`, req.url));
 }
 
+
 export const config = {
-  matcher: ['/((?!_next|.*\\..*).*)'], // щоб не чіпати статику і Next.js внутрішні файли
+  matcher: ['/((?!_next|.*\\..*).*)'], // охоплює всі шляхи, крім статичних
 };
+
