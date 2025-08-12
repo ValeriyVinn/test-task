@@ -1,13 +1,13 @@
 {
-  "site_title": "Тестове завдання",
-  "login": "Увійти",
-  "register": "Зареєструватися",
-  "logout": "Вийти",
-  "dashboard": "Дашборд",
-  "add_product": "Додати продукт",
-  "products": "Товари",
-  "profile": "Профіль",
-  "welcome": "Вітаємо Гість",
-  "lang_en": "Англійська",
-  "lang_uk": "Українська"
+  "site_title": "Test Task",
+  "login": "Login",
+  "register": "Register",
+  "logout": "Logout",
+  "dashboard": "Dashboard",
+  "add_product": "Add Product",
+  "products": "Products",
+  "profile": "Profile",
+  "welcome": "Welcome Guest",
+  "lang_en": "English",
+  "lang_uk": "Ukrainian"
 }
