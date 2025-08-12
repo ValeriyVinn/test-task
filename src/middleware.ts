@@ -5,6 +5,8 @@ const SUPPORTED_LOCALES = ['uk', 'en'];
 const DEFAULT_LOCALE = 'uk';
 
 export function middleware(req: NextRequest) {
+  console.log('Middleware triggered for:', req.nextUrl.pathname);
+
   const { pathname } = req.nextUrl;
 
   // Якщо вже є локаль в URL — нічого не робимо
@@ -29,6 +31,7 @@ export function middleware(req: NextRequest) {
 
 
 export const config = {
-  matcher: ['/((?!_next|.*\\..*).*)'], // охоплює всі шляхи, крім статичних
+  matcher: ['/', '/((?!_next|.*\\..*).*)'],
+ // охоплює всі шляхи, крім статичних
 };
 
