@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../../context/AuthContext";
-import { getProducts } from "../../../lib/api";
+
 
 type Product = {
   _id: string;
@@ -11,18 +10,35 @@ type Product = {
 };
 
 export default function ProductsPage() {
-  const { token } = useAuth();
+ 
   const [products, setProducts] = useState<Product[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (token) {
-      getProducts(token).then(setProducts).catch(console.error);
-    }
-  }, [token]);
+    fetch("http://localhost:5000/api/products", {
+      method: "GET",
+      credentials: "include", // 👈 автоматично додає HttpOnly cookie
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          const msg = await res.text();
+          throw new Error(msg || "Failed to fetch products");
+        }
+        return res.json();
+      })
+      .then((data) => setProducts(data))
+      .catch((err) => {
+        console.error(err);
+        setError(err.message);
+      });
+  }, []);
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h2 className="text-2xl font-bold mb-4">Products</h2>
+
+      {error && <p className="text-red-500">{error}</p>}
+
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {products.map((p) => (
           <div key={p._id} className="bg-white p-4 rounded-lg shadow">
