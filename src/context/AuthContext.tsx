@@ -20,50 +20,65 @@
 //   const [token, setToken] = useState<string | null>(null);
 //   const router = useRouter();
 
-// useEffect(() => {
-//   const savedToken = localStorage.getItem('token');
-//   const savedUser = localStorage.getItem('user');
-
-//   if (savedToken) {
-//     setToken(savedToken);
-//   }
-
-//   if (savedUser) {
+//   useEffect(() => {
 //     try {
-//       const parsedUser = JSON.parse(savedUser);
-//       setUser(parsedUser);
-//     } catch (err) {
-//       console.error('Error parsing saved user:', err);
-//       localStorage.removeItem('user'); // очищаємо зіпсовані дані
-//     }
-//   }
-// }, []);
+//       const savedToken = localStorage.getItem('token');
+//       const savedUser = localStorage.getItem('user');
 
+//       if (savedToken && typeof savedToken === 'string') {
+//         setToken(savedToken);
+//       }
+
+//       if (savedUser && typeof savedUser === 'string') {
+//         try {
+//           const parsedUser = JSON.parse(savedUser);
+//           if (parsedUser && typeof parsedUser === 'object') {
+//             setUser(parsedUser);
+//           } else {
+//             throw new Error('Invalid user format');
+//           }
+//         } catch (err) {
+//           console.error('Error parsing saved user from localStorage:', err);
+//           // localStorage.removeItem('user');
+//         }
+//       }
+//     } catch (err) {
+//       console.error('Error reading from localStorage:', err);
+//       // localStorage.removeItem('token');
+//       // localStorage.removeItem('user');
+//     }
+//   }, []);
 
 //   const login = async (email: string, password: string) => {
 //     const data = await loginUser(email, password);
+//     if (!data?.token || !data?.user) {
+//       throw new Error('Invalid login response');
+//     }
 //     setToken(data.token);
 //     setUser(data.user);
-//     localStorage.setItem('token', data.token);
-//     localStorage.setItem('user', JSON.stringify(data.user));
+//     // localStorage.setItem('token', data.token);
+//     // localStorage.setItem('user', JSON.stringify(data.user));
 //     router.push('/dashboard');
 //   };
 
 //   const register = async (name: string, email: string, password: string) => {
 //     const data = await registerUser(name, email, password);
+//     if (!data?.token || !data?.user) {
+//       throw new Error('Invalid register response');
+//     }
 //     setToken(data.token);
 //     setUser(data.user);
-//     localStorage.setItem('token', data.token);
-//     localStorage.setItem('user', JSON.stringify(data.user));
+//     // localStorage.setItem('token', data.token);
+//     // localStorage.setItem('user', JSON.stringify(data.user));
 //     router.push('/dashboard');
 //   };
 
 //   const logout = () => {
 //     setToken(null);
 //     setUser(null);
-//     localStorage.removeItem('token');
-//     localStorage.removeItem('user');
-//     router.push('/login');
+//     // localStorage.removeItem('token');
+//     // localStorage.removeItem('user');
+//     router.push('/');
 //   };
 
 //   return (
@@ -79,92 +94,67 @@
 //   return context;
 // };
 
+// !------------------------------------------------------------------------------
+"use client";
 
-'use client';
+import { createContext, useContext, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { fetchMe, loginUser, registerUser, logoutUser } from "../lib/api";
 
-import { createContext, useState, useContext, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { loginUser, registerUser } from '../lib/api';
-import { User } from '../types';
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+}
 
 interface AuthContextType {
   user: User | null;
-  token: string | null;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
 
+  // Перевірка авторизації при завантаженні
   useEffect(() => {
-    try {
-      const savedToken = localStorage.getItem('token');
-      const savedUser = localStorage.getItem('user');
-
-      if (savedToken && typeof savedToken === 'string') {
-        setToken(savedToken);
+    const checkAuth = async () => {
+      try {
+        const me = await fetchMe();
+        setUser(me);
+      } catch {
+        setUser(null);
       }
-
-      if (savedUser && typeof savedUser === 'string') {
-        try {
-          const parsedUser = JSON.parse(savedUser);
-          if (parsedUser && typeof parsedUser === 'object') {
-            setUser(parsedUser);
-          } else {
-            throw new Error('Invalid user format');
-          }
-        } catch (err) {
-          console.error('Error parsing saved user from localStorage:', err);
-          localStorage.removeItem('user');
-        }
-      }
-    } catch (err) {
-      console.error('Error reading from localStorage:', err);
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-    }
+    };
+    checkAuth();
   }, []);
 
   const login = async (email: string, password: string) => {
-    const data = await loginUser(email, password);
-    if (!data?.token || !data?.user) {
-      throw new Error('Invalid login response');
-    }
-    setToken(data.token);
-    setUser(data.user);
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify(data.user));
-    router.push('/dashboard');
+    await loginUser(email, password);
+    const me = await fetchMe();
+    setUser(me);
+    router.push("/dashboard");
   };
 
   const register = async (name: string, email: string, password: string) => {
-    const data = await registerUser(name, email, password);
-    if (!data?.token || !data?.user) {
-      throw new Error('Invalid register response');
-    }
-    setToken(data.token);
-    setUser(data.user);
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify(data.user));
-    router.push('/dashboard');
+    await registerUser(name, email, password);
+    const me = await fetchMe();
+    setUser(me);
+    router.push("/dashboard");
   };
 
-  const logout = () => {
-    setToken(null);
+  const logout = async () => {
+    await logoutUser();
     setUser(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    router.push('/');
+    router.push("/");
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
@@ -172,6 +162,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error('useAuth must be used within AuthProvider');
+  if (!context) throw new Error("useAuth must be used within AuthProvider");
   return context;
 };
